@@ -54,9 +54,11 @@
 
 1. **POST** `/api/bookgenre`  
    **Description:** Assigns a genre to a book. Ensures that the genre and book exist, and that the book is not already assigned to the genre.
+   **Authorization:** Librarian role required.
 
-2. **DELETE** `/api/bookgenre/Book/{BookId}/Genre/{GenreId}`  
+3. **DELETE** `/api/bookgenre/Book/{BookId}/Genre/{GenreId}`  
    **Description:** Disassociates a genre from a book. Checks if the genre is already assigned to the book before performing the action.
+   **Authorization:** Librarian role required.
 
 ---
 
@@ -109,14 +111,6 @@
    **Description:** Marks a book as returned by the librarian.  
    **Authorization:** Librarian role required.  
    **Route:** `id`.
-
----
-
-## **Setup & Installation**
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://your-repository-url.git
 
 
 
