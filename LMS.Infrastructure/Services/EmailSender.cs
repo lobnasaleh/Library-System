@@ -17,13 +17,13 @@ namespace LMS.Infrastructure.Services
             var smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("", ""), // Use an app-specific password
+                Credentials = new NetworkCredential("librarysystem80@gmail.com", "bjnh wnop asmd gyqb"), //  app-specific password
                 EnableSsl = true,
             };
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress("",""),
+                From = new MailAddress("librarysystem80@gmail.com", "LibraryManagementSystem"),
                 Subject = subject,
                 Body = message,
                 IsBodyHtml = true,
