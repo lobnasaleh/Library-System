@@ -2,6 +2,7 @@
 using LMS.Api.DTOs;
 using LMS.Core.Contracts;
 using LMS.Core.Interfaces;
+using LMS.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,13 @@ namespace LMS.Api.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IMapper mapper ;
+        private readonly IFileService fileService;
 
-        public AuthController(IAuthService _authService, IMapper mapper)
+        public AuthController(IAuthService _authService, IMapper mapper, IFileService fileService)
         {
             this._authService = _authService;
             this.mapper = mapper;
+            this.fileService = fileService;
         }
         [HttpPost("Login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -45,7 +48,7 @@ namespace LMS.Api.Controllers
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task< ActionResult<AuthResponse>> Register(RegisterRequestDTO registerRequestDTO)
+        public async Task< ActionResult<AuthResponse>> Register([FromForm]RegisterRequestDTO registerRequestDTO)
         {
 
             if (!ModelState.IsValid)
@@ -54,6 +57,12 @@ namespace LMS.Api.Controllers
             }
             //map registerRequestDto to REgisterRequest
             var req = mapper.Map<RegisterRequest>(registerRequestDTO);
+
+            var imageUrl = fileService.SaveImage(registerRequestDTO.Image, "Users");
+            if (imageUrl.Item1 == 1)
+            {
+                req.Image = imageUrl.Item2; // getting image url
+            }
 
             var result = await _authService.Register(req);
 

@@ -230,13 +230,6 @@ namespace LMS.Api.Controllers
         }
 
 
-
-
-
-
-
-
-
         [HttpGet("{id:int}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -342,7 +335,7 @@ namespace LMS.Api.Controllers
                     Book b = mapper.Map<Book>(bookfromreq);
 
 
-                    var imageUrl = fileService.SaveImage(bookfromreq.Image);
+                    var imageUrl = fileService.SaveImage(bookfromreq.Image,"Books");
                     if (imageUrl.Item1 == 1)
                     {
                         b.Image = imageUrl.Item2; // getting image url

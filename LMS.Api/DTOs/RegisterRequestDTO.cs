@@ -23,8 +23,8 @@ namespace LMS.Api.DTOs
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        public string? Image { get; set; }
-
+        [Required]
+        public IFormFile? Image { get; set; }
         [Required]
         [DataType(DataType.Date)]
         [Column(TypeName = "date")]

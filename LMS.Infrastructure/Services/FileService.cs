@@ -20,39 +20,49 @@ namespace LMS.Infrastructure.Services
             //
         }
 
-        public Tuple<int, string> SaveImage(IFormFile imageFile)
+        public Tuple<int, string> SaveImage(IFormFile imageFile, string category)
         {
             try
             {
                 var contentPath = env.ContentRootPath;
-                // path = "D://LMSapi/uploads" ,not exactly something like that
-                var path = Path.Combine(contentPath, "Uploads");
-                if (!Directory.Exists(path))
+                var uploadsFolder = Path.Combine(contentPath, "Uploads");
+
+                // Determine the target folder based on the category
+                var targetFolder = Path.Combine(uploadsFolder, category);
+
+                // Ensure the target directory exists
+                if (!Directory.Exists(targetFolder))
                 {
-                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(targetFolder);
                 }
 
-                // Check the allowed extenstions
-                var ext = Path.GetExtension(imageFile.FileName);
+                // Validate allowed extensions
+                var ext = Path.GetExtension(imageFile.FileName).ToLower();
                 var allowedExtensions = new string[] { ".jpg", ".png", ".jpeg" };
                 if (!allowedExtensions.Contains(ext))
                 {
-                    string msg = string.Format("Only {0} extensions are allowed", string.Join(",", allowedExtensions));
+                    string msg = $"Only {string.Join(", ", allowedExtensions)} extensions are allowed";
                     return new Tuple<int, string>(0, msg);
                 }
+
+                // Generate unique filename
                 string uniqueString = Guid.NewGuid().ToString();
-                // we are trying to create a unique filename here
                 var newFileName = uniqueString + ext;
-                var fileWithPath = Path.Combine(path, newFileName);
-                var stream = new FileStream(fileWithPath, FileMode.Create);
-                imageFile.CopyTo(stream);
-                stream.Close();
-                return new Tuple<int, string>(1, newFileName);
+                var fileWithPath = Path.Combine(targetFolder, newFileName);
+
+                // Save the file
+                using (var stream = new FileStream(fileWithPath, FileMode.Create))
+                {
+                    imageFile.CopyTo(stream);
+                }
+
+                return new Tuple<int, string>(1, Path.Combine(category, newFileName)); // Return relative path
             }
             catch (Exception ex)
             {
-                return new Tuple<int, string>(0, "Error has occured");
+                return new Tuple<int, string>(0, "An error occurred while saving the file: " + ex.Message);
             }
         }
+
     }
 }
