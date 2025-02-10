@@ -22,6 +22,7 @@ namespace LMS.Infrastructure.Data
        public DbSet<Borrow> Borrows { get; set; }
        public DbSet<Genre> Genres { get; set; }
        public DbSet<BookGenre> BookGenres { get; set; }
+       //3ady addef bardo el applicationuser bas howa keda keda bythatt by default
 
 
 
