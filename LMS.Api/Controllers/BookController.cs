@@ -20,12 +20,12 @@ namespace LMS.Api.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        //for injection
+       
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper mapper;
         private readonly IFileService fileService;
         protected readonly APIResponse response;
-      
+      //  private readonly ILogger<BookController> _logger;
 
 
         public BookController(IUnitOfWork _unitOfWork, IMapper mapper, IFileService fileService)//, ILogger<BookController> logger
